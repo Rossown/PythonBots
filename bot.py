@@ -1,8 +1,11 @@
 # bot.py
 import os
 from os.path import join,dirname
+from unicodedata import name
 import discord
+from discord import Member
 from discord.ext import commands
+from discord.ext.commands import has_permissions, MissingPermissions
 from discord.utils import get
 from dotenv import load_dotenv
 from newsapi import NewsApiClient
@@ -59,12 +62,17 @@ bot = commands.Bot(command_prefix='>', description=description, intents=intents)
 #     # /v2/sources
 #     sources = newsapi.get_sources()
 
+
+# CUSTOM METHODS
 async def getmeme():
     resp = requests.get('https://meme-api.herokuapp.com/gimme')
     return json.loads(resp.content).get('url')
 
 async def getUsers():
     print([member.name for member in members])
+
+
+# COMMANDS
 
 @bot.command(name='meme', description='Get a random meme!', pass_context=True)
 async def meme(ctx):
@@ -76,17 +84,27 @@ async def meme(ctx):
     else:
         await ctx.send(response)
 
+
 @bot.command(name='test', description='Testing method', pass_context=True)
-async def test(ctx):
+@has_permissions(manage_roles=True)
+async def test(ctx, argRole):
     logger.info(f'Inside test method.')
 
     member = ctx.author
-    roles = get(ctx.guild.roles)
-    membersRoles = member.roles
-    logger.info(f'All roles: {roles}')
-    logger.info(f'{member}\'s roles: {membersRoles}')
-    await ctx.send(f'ROLE: {get(ctx.guild.roles, name="Citizen")}')
+    roles = get(ctx.guild.roles, name=argRole)
 
+    member.add_role(roles)
+
+    logger.info(f'{member} wants roll: {roles}')
+    logger.info(f'{member}\'s roles: {membersRoles}')
+    await ctx.send(f'{member}: now has the {roles} role!')
+@test.error
+async def test_error(error, ctx):
+    if isinstance(error, MissingPermissions):
+        await ctx.send("You don't have permissions to do that!")
+
+
+# EVENTS
 @bot.event
 async def on_ready():
     print(bot.guilds)
@@ -120,7 +138,7 @@ async def on_member_join(member):
     await member.dm_channel.send(
         f'Hi {member.name}, welcome to The Land of the Free!'
     )
-    print(member.roles)
+    logger.info(f'{member.name} was assigned the following roles: {member.roles}')
 
 # @bot.event
 # async def on_reaction_add(reaction, user):
