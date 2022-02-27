@@ -98,7 +98,69 @@ async def writeCoolFile(members):
 async def getMember(ctx, member):
     return get(ctx.guild.members, name=member)
 
+
+# COGS
+
+class Greetings(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self._last_member = None
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        channel = member.guild.system_channel
+        if channel is not None:
+            await channel.send('Wlcome {0.mention}.'.format(member))
+
+        logger.info(f'{member.name} (AKA {member.display_name}) has joined the server')
+
+        #Auto add as a citizen
+        roleToAdd = get(member.guild.roles, name="Citizen")
+        await member.add_roles(roleToAdd)
+
+
+        logger.info(f'{member.name} was assigned the following roles: {member.roles}')
+
+    @commands.command()
+    async def hello(self, ctx, *, member: discord.Member = None):
+        """Says hello"""
+        member = member or ctx.author
+        if self._last_member is None or self._last_member.id != member.id:
+            await ctx.send('Hello {0.name}~'.format(member))
+        else:
+            await ctx.send('Hello {0.name}... This feels familiar...'.format(member))
+        self._last_member = member
+
 # COMMANDS
+
+# @bot.event
+# async def on_message(message):
+#     if message.author == bot.user:
+#         return
+
+#     elif "bad bot" in str(message.content).lower():
+#         print(message.author)
+#         if str(message.author)[:-5] == "TitanGusang":
+#             response = 'Bitch'
+#         else:
+#             response = "I am sorry for my actions, " + str(message.author)[:-5]
+
+#         await message.channel.send(response)
+
+#     elif "good bot" in str(message.content).lower():
+#         response = 'Thank you kind human'
+#         await message.channel.send(response)
+
+#     elif "apologize bot" in str(message.content).lower():
+#         response = "I am sorry"
+#         await message.channel.send(response)
+
+#     elif 'happy birthday' in message.content.lower():
+#         await message.channel.send('Happy Birthday! :balloon: :birthday:')
+
+#     elif str(message.content).lower() == '>suck a dick':
+#         await message.channel.send('https://tenor.com/view/yes-hamster-carrot-bj-blow-job-gif-15498598')
+
 
 @bot.command()
 async def roll(ctx, dice: str):
@@ -206,55 +268,6 @@ async def on_ready():
         f'{guild.name} (ID: {guild.id})'
         )
     logger.info(f'{bot.user} (ID: {bot.user.id}) has connected to Discord!')
-
-
-@bot.event
-async def on_member_join(member):
-    logger.info(f'{member.name} (AKA {member.display_name}) has joined the server')
-
-    #Auto add as a citizen
-    roleToAdd = get(member.guild.roles, name="Citizen")
-    await member.add_roles(roleToAdd)
-
-    await member.create_dm()
-    await member.dm_channel.send(
-        f'Hi {member.name}, Welcome to The Land of the Free!'
-    )
-    logger.info(f'{member.name} was assigned the following roles: {member.roles}')
-
-# @bot.event
-# async def on_reaction_add(reaction, user):
-
-#     print(reaction)
-#     print(user)
-
-# @bot.event
-# async def on_message(message):
-#     if message.author == bot.user:
-#         return
-
-#     elif "bad bot" in str(message.content).lower():
-#         print(message.author)
-#         if str(message.author)[:-5] == "TitanGusang":
-#             response = 'Bitch'
-#         else:
-#             response = "I am sorry for my actions, " + str(message.author)[:-5]
-
-#         await message.channel.send(response)
-
-#     elif "good bot" in str(message.content).lower():
-#         response = 'Thank you kind human'
-#         await message.channel.send(response)
-
-#     elif "apologize bot" in str(message.content).lower():
-#         response = "I am sorry"
-#         await message.channel.send(response)
-
-#     elif 'happy birthday' in message.content.lower():
-#         await message.channel.send('Happy Birthday! :balloon: :birthday:')
-
-#     elif str(message.content).lower() == '>suck a dick':
-#         await message.channel.send('https://tenor.com/view/yes-hamster-carrot-bj-blow-job-gif-15498598')
  
-
+bot.add_cog(Greetings(bot))
 bot.run(TOKEN)
