@@ -127,10 +127,10 @@ async def on_message(message):
 async def meme(ctx):
     url = await getmeme()
     response = "Not here buckaroo"
-    if str(ctx.message.channel) == "memes":
-        await ctx.message.channel.send(url)
+    if str(ctx.channel) == "memes":
+        await ctx.channel.send(url)
     else:
-        await ctx.message.channel.send(response)
+        await ctx.channel.send(response)
 
 
 bot.run(TOKEN)
