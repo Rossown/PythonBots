@@ -95,17 +95,20 @@ async def info_error(ctx, error):
         await ctx.send('I cound not find that member...')
 
 @bot.command(name='test', description='Testing method', pass_context=True)
-@has_permissions(manage_roles=True)
 async def test(ctx, argMember: discord.Member, argRole: discord.Role):
     logger.info(f'Inside test method.')
 
     member = argMember
     roles = argRole
 
+    if roles.name == "dev":
+        logger.warn(f'{member.display_name} is requesting access to DEV!!')
+        raise MissingPermissions
+
     logger.info(f'ARG: {argRole}')
     logger.info(f'MEMBER: {member}')
     logger.info(f'Role: {roles}')
-    await member.add_roles(roles)
+    await bot.add_roles(roles)
 
     logger.info(f'{member} wants roll: {roles}')
     await ctx.send(f'{member}: now has the {roles} role!')
