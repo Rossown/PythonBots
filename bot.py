@@ -123,7 +123,7 @@ async def on_message(message):
     elif str(message.content).lower() == '>suck a dick':
         await message.channel.send('https://tenor.com/view/yes-hamster-carrot-bj-blow-job-gif-15498598')
  
-@bot.command(description='Get a random meme!')
+@bot.command(description='Get a random meme!', pass_context=True)
 async def meme(ctx):
     url = await getmeme()
     response = "Not here buckaroo"
