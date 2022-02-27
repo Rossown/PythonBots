@@ -83,7 +83,10 @@ async def readCoolFile(ctx):
     with open(coolFile, 'r') as fp:
         coolUsers = [line.rstrip() for line in fp]
     logger.info(f'Cool users read in: {coolUsers}')
-    coolGroup = [await getMember(ctx, user) for user in coolUsers]
+
+    for user in coolUsers:
+        member = await getMember(ctx, user)
+        coolGroup.append(member)
 
 async def writeCoolFile(members):
     logger.info(f'Writing to cool file...')
