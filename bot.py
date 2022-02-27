@@ -64,7 +64,7 @@ async def getUsers():
 async def meme(ctx):
     url = await getmeme()
     response = "Not here buckaroo"
-    if str(ctx.channel) == "memes":
+    if str(ctx.channel) == "memes" or str(ctx.channel) == "dev":
         await ctx.send(url)
     else:
         await ctx.send(response)
