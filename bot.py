@@ -135,6 +135,31 @@ async def test_error(ctx, error):
     else:
         logger.error(str(error))
 
+
+# Cool
+coolGroup = []
+
+@bot.command(name='coolAdd', description='Add to the cool group.', pass_context=True)
+async def coolAdd(ctx, member: discord.Member):
+    if member.name == "SporksInTheRoad":
+        coolGroup.append(member)
+    else:
+        await ctx.send(f'{ctx.author.display_name} does not have access to add to the cool group. :)')
+
+@coolAdd.error
+async def cooldAdd_error(ctx, error):
+    if isinstance(error, commands.BadArgument):
+        await ctx.send('I cound not find that member...')
+
+@bot.command(name='cool', description='Are you cool?', pass_context=True)
+async def cool(ctx):
+    
+    if ctx.author not in coolGroup:
+        await ctx.send(f'No, {ctx.author.display_name} is not cool.')
+    else:
+        await ctx.send(f'Yes, {ctx.author.display_name} is cool.')
+
+
 # EVENTS
 @bot.event
 async def on_ready():
