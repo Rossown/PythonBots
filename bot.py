@@ -60,6 +60,15 @@ async def getmeme():
 async def getUsers():
     print([member.name for member in members])
 
+@bot.command(name='meme', description='Get a random meme!', pass_context=True)
+async def meme(ctx):
+    url = await getmeme()
+    response = "Not here buckaroo"
+    if str(ctx.channel) == "memes":
+        await ctx.send(url)
+    else:
+        await ctx.send(response)
+
 @bot.event
 async def on_ready():
     print(bot.guilds)
@@ -123,14 +132,5 @@ async def on_message(message):
     elif str(message.content).lower() == '>suck a dick':
         await message.channel.send('https://tenor.com/view/yes-hamster-carrot-bj-blow-job-gif-15498598')
  
-@bot.command(description='Get a random meme!', pass_context=True)
-async def meme(ctx):
-    url = await getmeme()
-    response = "Not here buckaroo"
-    if str(ctx.channel) == "memes":
-        await ctx.send(url)
-    else:
-        await ctx.send(response)
-
 
 bot.run(TOKEN)
