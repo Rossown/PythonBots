@@ -1,0 +1,21 @@
+
+To update the discord services:
+cd /lib/systemd/system/
+- discord.service
+- discord-nathan.service
+sudo systemctl start/stop/restart <service name>
+sudo systemctl daemon-reload
+
+
+To update the server services:
+cd /etc/systemd/system/
+-server.service
+
+To update hte nginx server
+cd /etc/nginx/sites-available/server
+sudo systemctl restart nginx
+sudo systemctl status nginx
+
+
+NOIP service
+check to see if running - sudo noip2 -S

@@ -1,0 +1,4 @@
+[<Guild id=741774800657317938 name='The Land of the Free' shard_id=None chunked=True member_count=13>]
+['Vice President Titan', 'President Spork', 'Bonjour', 'MemeBot', 'ya_croissant', 'SurfyTadpole', 'Slyzer', 'AngryBeaver', 'I_Deal_Memes', 'GaM3R g0rL Sierra', 'Balashin', 'SoD Mudkep', 'FallGuysLeaderboard']
+NateBot#7943 has connected to Discord!
+The Land of the Free (id: 741774800657317938)
