@@ -163,7 +163,7 @@ async def test_error(ctx, error):
 # Cool
 @bot.command(name='coolAdd', description='Add to the cool group.', pass_context=True)
 async def coolAdd(ctx, member: discord.Member):
-    if member.name == "SporksInTheRoad":
+    if ctx.author.name == "SporksInTheRoad":
         coolGroup.append(member)
         await writeCoolFile(coolGroup)
     else:
