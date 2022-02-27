@@ -128,9 +128,9 @@ async def meme(ctx):
     url = await getmeme()
     response = "Not here buckaroo"
     if str(ctx.channel) == "memes":
-        await ctx.channel.send(url)
+        await ctx.send(url)
     else:
-        await ctx.channel.send(response)
+        await ctx.send(response)
 
 
 bot.run(TOKEN)
