@@ -77,13 +77,13 @@ async def getmeme():
 async def getUsers():
     print([member.name for member in members])
 
-async def readCoolFile():
+async def readCoolFile(ctx):
     coolUsers = []
     logger.info(f'Reading cool file...')
     with open(coolFile, 'r') as fp:
         coolUsers = [line.rstrip() for line in fp]
     logger.info(f'Cool users read in: {coolUsers}')
-    coolGroup = [await getMember(user) for user in coolUsers]
+    coolGroup = [await getMember(ctx, user) for user in coolUsers]
 
 async def writeCoolFile(members):
     logger.info(f'Writing to cool file...')
@@ -175,7 +175,7 @@ async def cooldAdd_error(ctx, error):
 async def cool(ctx):
     if len(coolGroup) == 0:
         #populateCoolGroup
-        await readCoolFile()
+        await readCoolFile(ctx)
     if ctx.author not in coolGroup:
         await ctx.send(f'No, {ctx.author.display_name} is not cool.')
     else:
