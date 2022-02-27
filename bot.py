@@ -85,6 +85,7 @@ async def test(ctx):
     membersRoles = member.roles
     logger.info(f'All roles: {roles}')
     logger.info(f'{member}\'s roles: {membersRoles}')
+    ctx.send(f'ROLE: {get(ctx.guild.roles, name="Citizen")}')
 
 @bot.event
 async def on_ready():
@@ -111,6 +112,9 @@ async def on_ready():
 async def on_member_join(member):
     logger.info(f'{member.name} (AKA {member.display_name}) has joined the server')
 
+    #Auto add as a citizen
+    roleToAdd = get(member.guild.roles, name="Citizen")
+    member.add_role(roleToAdd)
 
     await member.create_dm()
     await member.dm_channel.send(
