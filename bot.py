@@ -84,7 +84,15 @@ async def meme(ctx):
         await ctx.send(url)
     else:
         await ctx.send(response)
-
+@bot.command(name='info', description='Get information about a user.', pass_context=True)
+async def info(ctx, *, member: discord.Member):
+    """Tells you some info about the member."""
+    fmt = '{0} joined on {0.joined_at} and has {1} roles.'
+    await ctx.send(fmt.format(member, len(member.roles)))
+@info.error
+async def info_error(ctx, error):
+    if isinstance(error, commands.BadArgument):
+        await ctx.send('I cound not find that member...')
 
 @bot.command(name='test', description='Testing method', pass_context=True)
 @has_permissions(manage_roles=True)
@@ -101,19 +109,6 @@ async def test(ctx, argMember: discord.Member, argRole: discord.Role):
 
     logger.info(f'{member} wants roll: {roles}')
     await ctx.send(f'{member}: now has the {roles} role!')
-
-@bot.command(name='info', description='Get information about a user.', pass_context=True)
-async def info(ctx, *, member: discord.Member):
-    """Tells you some info about the member."""
-    fmt = '{0} joined on {0.joined_at} and has {1} roles.'
-    await ctx.send(fmt.format(member, len(member.roles)))
-
-
-@info.error
-async def info_error(ctx, error):
-    if isinstance(error, commands.BadArgument):
-        await ctx.send('I cound not find that member...')
-
 @test.error
 async def test_error(ctx, error):
     if isinstance(error, MissingPermissions):
