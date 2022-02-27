@@ -162,7 +162,7 @@ async def test_error(ctx, error):
 async def coolAdd(ctx, member: discord.Member):
     if len(coolGroup) == 0:
         #populateCoolGroup
-        do = "something"
+        await readCoolFile()
     elif member.name == "SporksInTheRoad":
         coolGroup.append(member)
         await writeCoolFile(coolGroup)
