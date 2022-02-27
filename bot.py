@@ -1,23 +1,36 @@
 # bot.py
+from ntpath import join
 import os
+from os.path import join,dirname
 import discord
+from discord.ext import commands
+from discord.utils import get
 import json
 import requests
 from dotenv import load_dotenv
 from newsapi import NewsApiClient
 
-load_dotenv()
+description = '''Main Discord bot for The Land of the Free!
+
+Hopefully this will do something useful:)
+'''
+intents = discord.Intents.default()
+intents.members = True
+
+bot = commands.Bot(command_prefix='>', description=description, intents=intents)
+
+
+dotenv_path = join(dirname(__file__), '..', '.env')
+load_dotenv(dotenv_path)
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_TOKEN')
 NEWSKEY=os.getenv('NEWSAPI')
 
-intents = discord.Intents.default()
-intents.members = True
-client = discord.Client(intents=intents)
 
 newsapi = NewsApiClient(api_key=NEWSKEY)
 
 members = []
+
 
 async def getNews():
     # /v2/top-headlines
@@ -47,14 +60,14 @@ async def getmeme():
 async def getUsers():
     print([member.name for member in members])
 
-@client.event
+@bot.event
 async def on_ready():
-    print(client.guilds)
-    for guild in client.guilds:
+    print(bot.guilds)
+    for guild in bot.guilds:
         if guild.name == GUILD:
             break
     
-    for guilds in client.guilds:
+    for guilds in bot.guilds:
         for member in guild.members:
             members.append(member)
     
@@ -62,12 +75,12 @@ async def on_ready():
 
 
     print(
-        f'{client.user} has connected to Discord!\n'
-        f'{guild.name} (id: {guild.id})'
+        f'{bot.user} (ID: {bot.user.id}) has connected to Discord!\n'
+        f'{guild.name} (ID: {guild.id})'
         )
 
 
-@client.event
+@bot.event
 async def on_member_join(member):
     
     await member.create_dm()
@@ -76,25 +89,16 @@ async def on_member_join(member):
     )
     print(member.roles)
 
-@client.event
+@bot.event
 async def on_reaction_add(reaction, user):
 
     print(reaction)
     print(user)
 
-@client.event
+@bot.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author == bot.user:
         return
-
-    
-    if str(message.content).lower() == '>meme':
-        url = await getmeme()
-        response = "Not here buckaroo"
-        if str(message.channel) == "memes":
-            await message.channel.send(url)
-        else:
-            await message.channel.send(response)
 
     elif "bad bot" in str(message.content).lower():
         print(message.author)
@@ -119,6 +123,14 @@ async def on_message(message):
     elif str(message.content).lower() == '>suck a dick':
         await message.channel.send('https://tenor.com/view/yes-hamster-carrot-bj-blow-job-gif-15498598')
  
+@bot.command(description='Get a random meme!')
+async def meme(ctx):
+    url = await getmeme()
+    response = "Not here buckaroo"
+    if str(ctx.message.channel) == "memes":
+        await ctx.message.channel.send(url)
+    else:
+        await ctx.message.channel.send(response)
 
 
-client.run(TOKEN)
+bot.run(TOKEN)
