@@ -93,6 +93,9 @@ async def test(ctx, argRole):
     member = ctx.author
     roles = get(ctx.guild.roles, name=argRole)
 
+    logger.info(f'ARG: {argRole}')
+    logger.info(f'MEMBER: {member}')
+    logger.info(f'Role: {roles}')
     member.add_role(roles)
 
     logger.info(f'{member} wants roll: {roles}')
