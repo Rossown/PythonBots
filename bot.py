@@ -1,4 +1,5 @@
 # bot.py
+from dis import disco
 import os
 from os.path import join,dirname
 from unicodedata import name
@@ -87,7 +88,7 @@ async def meme(ctx):
 
 @bot.command(name='test', description='Testing method', pass_context=True)
 @has_permissions(manage_roles=True)
-async def test(ctx, argRole):
+async def test(ctx, argMember: discord.Member, argRole: discord.Role):
     logger.info(f'Inside test method.')
 
     member = ctx.author
@@ -99,15 +100,26 @@ async def test(ctx, argRole):
     await member.add_roles(roles)
 
     logger.info(f'{member} wants roll: {roles}')
-    logger.info(f'{member}\'s roles: {membersRoles}')
     await ctx.send(f'{member}: now has the {roles} role!')
 @test.error
-async def test_error(error, ctx):
+async def test_error(ctx, error):
     if isinstance(error, MissingPermissions):
         await ctx.send("You don't have permissions to do that!")
+    elif isinstance(error, commands.BadArgument):
+        await ctx.send('I cound not find that member or role...')
     else:
         logger.error(str(error))
 
+
+@bot.command()
+async def info(ctx, *, member: discord.Member):
+    """Tells you some info about the member."""
+    fmt = '{0} joined on {0.joined_at} and has {1} roles.'
+    await ctx.send(fmt.format(member, len(member.roles)))
+@info.error
+async def info_error(ctx, error):
+    if isinstance(error, commands.BadArgument):
+        await ctx.send('I cound not find that member...')
 
 # EVENTS
 @bot.event
