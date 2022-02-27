@@ -85,7 +85,7 @@ async def test(ctx):
     membersRoles = member.roles
     logger.info(f'All roles: {roles}')
     logger.info(f'{member}\'s roles: {membersRoles}')
-    ctx.send(f'ROLE: {get(ctx.guild.roles, name="Citizen")}')
+    await ctx.send(f'ROLE: {get(ctx.guild.roles, name="Citizen")}')
 
 @bot.event
 async def on_ready():
