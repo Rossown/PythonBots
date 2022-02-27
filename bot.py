@@ -13,6 +13,7 @@ from newsapi import NewsApiClient
 import json
 import requests
 import logging
+import random
 
 loggingFile = join(dirname(__file__), "..", "logs", "discord.log")
 logging.basicConfig(filename=loggingFile, filemode='w', format='%(asctime)s %(levelname)s %(message)s')
@@ -75,6 +76,18 @@ async def getUsers():
 
 # COMMANDS
 
+@bot.command()
+async def roll(ctx, dice: str):
+    """Rolls a dice in NdN format."""
+    try:
+        rolls, limit = map(int, dice.split('d'))
+    except Exception:
+        await ctx.send('Format has to be in NdN!')
+        return
+
+    result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
+    await ctx.send(result)
+
 @bot.command(name='meme', description='Get a random meme!', pass_context=True)
 async def meme(ctx):
     logger.info(f'{ctx.author.name} has requested a meme')
@@ -84,6 +97,7 @@ async def meme(ctx):
         await ctx.send(url)
     else:
         await ctx.send(response)
+
 @bot.command(name='info', description='Get information about a user.', pass_context=True)
 async def info(ctx, *, member: discord.Member):
     """Tells you some info about the member."""
@@ -153,7 +167,7 @@ async def on_member_join(member):
 
     await member.create_dm()
     await member.dm_channel.send(
-        f'Hi {member.name}, welcome to The Land of the Free!'
+        f'Hi {member.name}, Welcome to The Land of the Free!'
     )
     logger.info(f'{member.name} was assigned the following roles: {member.roles}')
 
