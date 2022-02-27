@@ -108,7 +108,7 @@ async def test(ctx, argMember: discord.Member, argRole: discord.Role):
     logger.info(f'ARG: {argRole}')
     logger.info(f'MEMBER: {member}')
     logger.info(f'Role: {roles}')
-    await bot.add_roles(roles)
+    await member.add_roles(roles)
 
     logger.info(f'{member} wants roll: {roles}')
     await ctx.send(f'{member}: now has the {roles} role!')
