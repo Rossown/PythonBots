@@ -106,7 +106,7 @@ async def test_error(error, ctx):
     if isinstance(error, MissingPermissions):
         await ctx.send("You don't have permissions to do that!")
     else:
-        logger.error(error)
+        logger.error(str(error))
 
 
 # EVENTS
