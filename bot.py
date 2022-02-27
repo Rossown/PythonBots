@@ -90,7 +90,7 @@ async def meme(ctx):
 async def test(ctx, argRole):
     logger.info(f'Inside test method.')
 
-    member = ctx.message.author
+    member = ctx.author
     roles = get(member.guild.roles, name=argRole)
 
     logger.info(f'ARG: {argRole}')
