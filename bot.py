@@ -91,8 +91,8 @@ async def meme(ctx):
 async def test(ctx, argMember: discord.Member, argRole: discord.Role):
     logger.info(f'Inside test method.')
 
-    member = ctx.author
-    roles = get(member.guild.roles, name=argRole)
+    member = argMember
+    roles = argRole
 
     logger.info(f'ARG: {argRole}')
     logger.info(f'MEMBER: {member}')
@@ -111,7 +111,7 @@ async def test_error(ctx, error):
         logger.error(str(error))
 
 
-@bot.command()
+@bot.command(name='info', description='Get information about a user.', pass_context=True)
 async def info(ctx, *, member: discord.Member):
     """Tells you some info about the member."""
     fmt = '{0} joined on {0.joined_at} and has {1} roles.'
