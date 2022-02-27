@@ -93,7 +93,7 @@ async def writeCoolFile(members):
     with open(coolFile, 'w') as fp:
         fp.truncate()
         for member in members:
-            fp.write(member.name)
+            fp.write(member.name + '\n')
             
 async def getMember(ctx, member):
     return get(ctx.guild.members, name=member)
