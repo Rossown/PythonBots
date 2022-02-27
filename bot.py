@@ -103,7 +103,7 @@ async def test(ctx, argMember: discord.Member, argRole: discord.Role):
 
     if roles.name == "dev":
         logger.warn(f'{member.display_name} is requesting access to DEV!!')
-        raise MissingPermissions
+        raise MissingPermissions("Ask admin for access to dev")
 
     logger.info(f'ARG: {argRole}')
     logger.info(f'MEMBER: {member}')
