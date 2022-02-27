@@ -96,7 +96,7 @@ async def test(ctx, argRole):
     logger.info(f'ARG: {argRole}')
     logger.info(f'MEMBER: {member}')
     logger.info(f'Role: {roles}')
-    await bot.add_roles(member, roles)
+    await member.add_roles(roles)
 
     logger.info(f'{member} wants roll: {roles}')
     logger.info(f'{member}\'s roles: {membersRoles}')
