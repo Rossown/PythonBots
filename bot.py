@@ -1,14 +1,20 @@
 # bot.py
-from ntpath import join
 import os
 from os.path import join,dirname
 import discord
 from discord.ext import commands
 from discord.utils import get
-import json
-import requests
 from dotenv import load_dotenv
 from newsapi import NewsApiClient
+import json
+import requests
+import logging
+
+loggingFile = join(dirname(__file__), "..", "logs", "discord.log")
+logging.basicConfig(filename=loggingFile, filemode='w', format='%(asctime)s %(levelname)s %(message)s')
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 description = '''Main Discord bot for The Land of the Free!
 
@@ -62,6 +68,7 @@ async def getUsers():
 
 @bot.command(name='meme', description='Get a random meme!', pass_context=True)
 async def meme(ctx):
+    logger.info(f'{ctx.author.name} has requested a meme')
     url = await getmeme()
     response = "Not here buckaroo"
     if str(ctx.channel) == "memes" or str(ctx.channel) == "dev":
@@ -69,34 +76,47 @@ async def meme(ctx):
     else:
         await ctx.send(response)
 
+@bot.command(name='test', description='Testing method', pass_context=True)
+async def test(ctx):
+    logger.info(f'Inside test method.')
+
+    member = ctx.author
+    roles = get(ctx.guild.roles)
+    membersRoles = member.roles
+    logger.info(f'All roles: {roles}')
+    logger.info(f'{member}\'s roles: {membersRoles}')
+
 @bot.event
 async def on_ready():
-    # print(bot.guilds)
-    # for guild in bot.guilds:
-    #     if guild.name == GUILD:
-    #         break
+    print(bot.guilds)
+    for guild in bot.guilds:
+        if guild.name == GUILD:
+            break
     
-    # for guilds in bot.guilds:
-    #     for member in guild.members:
-    #         members.append(member)
+    for guilds in bot.guilds:
+        for member in guild.members:
+            members.append(member)
     
-    # print([member.name for member in members])
+    print([member.name for member in members])
 
 
     print(
         f'{bot.user} (ID: {bot.user.id}) has connected to Discord!\n'
-        # f'{guild.name} (ID: {guild.id})'
+        f'{guild.name} (ID: {guild.id})'
         )
+    logger.info(f'{bot.user} (ID: {bot.user.id}) has connected to Discord!')
 
 
-# @bot.event
-# async def on_member_join(member):
-    
-#     await member.create_dm()
-#     await member.dm_channel.send(
-#         f'Hi {member.name}, welcome to The Land of the Free!'
-#     )
-#     print(member.roles)
+@bot.event
+async def on_member_join(member):
+    logger.info(f'{member.name} (AKA {member.display_name}) has joined the server')
+
+
+    await member.create_dm()
+    await member.dm_channel.send(
+        f'Hi {member.name}, welcome to The Land of the Free!'
+    )
+    print(member.roles)
 
 # @bot.event
 # async def on_reaction_add(reaction, user):
