@@ -166,6 +166,7 @@ async def coolAdd(ctx, member: discord.Member):
     if ctx.author.name == "SporksInTheRoad":
         coolGroup.append(member)
         await writeCoolFile(coolGroup)
+        await ctx.send(f'{member.display_name} has been added to the cool group. :)')
     else:
         await ctx.send(f'{ctx.author.display_name} does not have access to add to the cool group. :)')
 
