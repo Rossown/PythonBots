@@ -21,6 +21,8 @@ logging.basicConfig(filename=loggingFile, filemode='w', format='%(asctime)s %(le
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+coolFile = join(dirname(__file__), "cool.txt")
+
 description = '''Main Discord bot for The Land of the Free!
 
 Hopefully this will do something useful:)'''
@@ -39,6 +41,8 @@ NEWSKEY=os.getenv('NEWSAPI')
 newsapi = NewsApiClient(api_key=NEWSKEY)
 
 members = []
+coolGroup = []
+
 
 bot = commands.Bot(command_prefix='>', description=description, intents=intents)
 
@@ -73,6 +77,20 @@ async def getmeme():
 async def getUsers():
     print([member.name for member in members])
 
+async def readCoolFile():
+    coolUsers = []
+    with open(coolFile, 'r') as fp:
+        coolUsers = [line.rstrip() for line in fp]
+    coolGroup = [getMember(user) for user in coolUsers]
+
+async def writeCoolFile(members):
+    with open(coolFile, 'w') as fp:
+        fp.truncate()
+        for member in members:
+            fp.write(member.name)
+            
+async def getMember(ctx, member):
+    return get(ctx.guild.members, name=member)
 
 # COMMANDS
 
@@ -137,12 +155,14 @@ async def test_error(ctx, error):
 
 
 # Cool
-coolGroup = []
-
 @bot.command(name='coolAdd', description='Add to the cool group.', pass_context=True)
 async def coolAdd(ctx, member: discord.Member):
-    if member.name == "SporksInTheRoad":
+    if len(coolGroup) == 0:
+        #populateCoolGroup
+        do = "something"
+    elif member.name == "SporksInTheRoad":
         coolGroup.append(member)
+        await writeCoolFile(coolGroup)
     else:
         await ctx.send(f'{ctx.author.display_name} does not have access to add to the cool group. :)')
 
