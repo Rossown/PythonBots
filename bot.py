@@ -96,7 +96,7 @@ async def test(ctx, argRole):
     logger.info(f'ARG: {argRole}')
     logger.info(f'MEMBER: {member}')
     logger.info(f'Role: {roles}')
-    member.add_role(roles)
+    member.add_roles(roles)
 
     logger.info(f'{member} wants roll: {roles}')
     logger.info(f'{member}\'s roles: {membersRoles}')
@@ -137,7 +137,7 @@ async def on_member_join(member):
 
     #Auto add as a citizen
     roleToAdd = get(member.guild.roles, name="Citizen")
-    member.add_role(roleToAdd)
+    member.add_roles(roleToAdd)
 
     await member.create_dm()
     await member.dm_channel.send(
