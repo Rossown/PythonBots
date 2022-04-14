@@ -225,13 +225,15 @@ class MemeBotCommands(commands.Cog):
             await ctx.send(f'Yes, {ctx.author.display_name} is cool.')
 
     @commands.command()
-    async def gif(self, ctx, *, searchTerm, limit, ageRange):
+    async def gif(self, ctx, searchTerm, limit, ageRange):
         """Get Random Gif. >gif <searchTerm (optional)>"""
+        logger.info("In gif")
         try:
             intLimit = int(limit)
         except ValueError:
             await ctx.send('Limit needs to be a number.')
 
+        logger.info(f"{searchTerm}, {limit}, {ageRange}")
         if searchTerm:
             gifUrl = randomGif.getRandomWithTerm(searchTerm, intLimit, ageRange)
             await ctx.send(gifUrl)
