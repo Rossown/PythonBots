@@ -1,2 +1,3 @@
 #Ignore Virutal Environments
 env
+\.env
