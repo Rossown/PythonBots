@@ -224,7 +224,7 @@ class MemeBotCommands(commands.Cog):
             await ctx.send(f'Yes, {ctx.author.display_name} is cool.')
 
     @commands.command()
-    async def gif(self, ctx, searchTerm: None, limit: None, ageRange: None):
+    async def gif(self, ctx, searchTerm=None, limit=20, ageRange='all'):
         """Get Random Gif. >gif <searchTerm (optional)>"""
         logger.info("In gif")
         try:
