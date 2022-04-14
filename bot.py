@@ -207,7 +207,6 @@ class MemeBotCommands(commands.Cog):
             await ctx.send(f'{member.display_name} has been added to the cool group. :)')
         else:
             await ctx.send(f'{ctx.author.display_name} does not have access to add to the cool group. :)')
-
     @coolAdd.error
     async def cooldAdd_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
@@ -225,7 +224,7 @@ class MemeBotCommands(commands.Cog):
             await ctx.send(f'Yes, {ctx.author.display_name} is cool.')
 
     @commands.command()
-    async def gif(self, ctx, searchTerm, limit, ageRange):
+    async def gif(self, ctx, searchTerm: None, limit: None, ageRange: None):
         """Get Random Gif. >gif <searchTerm (optional)>"""
         logger.info("In gif")
         try:
